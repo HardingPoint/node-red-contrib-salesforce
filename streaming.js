@@ -20,12 +20,14 @@ module.exports = function(RED) {
                 try {
                     nforce.authenticate(org, node.connection, msg, function(err, oauth) {
                         if (err) {
-                            var msg = '';
-                            if (err.message)
-                                msg = err.message;
+                            var errormsg = '';
+                            if (err.message==null)
+                                errormsg = JSON.stringify(err);
 
-                            node.status({ fill: 'red', shape: 'dot', text: 'Error:' + msg });
-                            return node.error(err, msg);
+                            node.status({ fill: 'red', shape: 'dot', text: 'Error:' + errormsg });
+                            console.log('[GRAX.io] ERROR nforce.authenticate - ' + JSON.stringify(err));
+                            // console.log(JSON.stringify(node.connection));
+                            return node.error(err, errormsg);
                         }
                         const opts = {};
                         const topicType = msg.topicType || config.topicType;
