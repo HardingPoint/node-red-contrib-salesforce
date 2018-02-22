@@ -20,8 +20,12 @@ module.exports = function(RED) {
                 try {
                     nforce.authenticate(org, node.connection, msg, function(err, oauth) {
                         if (err) {
-                            node.status({ fill: 'red', shape: 'dot', text: 'Error:' + err.message });
-                            return node.error(err, err.message);
+                            var msg = '';
+                            if (err.message)
+                                msg = err.message;
+
+                            node.status({ fill: 'red', shape: 'dot', text: 'Error:' + msg });
+                            return node.error(err, msg);
                         }
                         const opts = {};
                         const topicType = msg.topicType || config.topicType;
